@@ -1,0 +1,36 @@
+1. synonyms -> Isomorphic, Universal, SSR
+    -> these are all different words meaning the exact same thing.
+
+2. SSR
+    -> client rendering -> server sends data to client and client renders HTML.
+    -> server rendering -> server renders HTML and send this HTML to client.
+    -> SSR: Blending client side and server side: Fetch data on the server and render finished pages.
+
+3. Benefits of SSR:
+    -> Faster load times
+        If we are running pretty large application or that will grow very large,
+        rendering on server will have performance improvements in terms of response time of your App.
+        consider this fact, the browser on which your application renders the application is 
+        impacted by the machine it runs on. Therefore, if people are looking at your application
+        on older hardware such as an old phone laptop they will see a difference in performance
+        to those running your hardware. however, by rendering the application in the server
+        you control the performance of render.
+    -> Improved SEO
+        Additionally if you are concerned if your site or application gets found in the
+        top results of google that might be the second benefit of rendering an application
+        on the server.
+        JavaScript doesn't play well with search engines and unfortunately when google for instance
+        sends it bots to index your pages and it sees it javascript not HTML
+        Over the past few years the situation has improved but you are better positioned to be 
+        indexed properly if what that bot sees is HTML.
+
+
+4. Next.js -> A fullstack framework for reactjs.
+
+5. useHistory hook exposed by "react-router-dom" to route programmatically.
+    -> const history = useHistory();
+    -> history.push("/path"); or history.replace("/path");
+
+6. Next.js routing
+    -> From code based to file based
+    ->
