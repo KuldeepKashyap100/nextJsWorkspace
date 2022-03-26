@@ -33,4 +33,11 @@
 
 6. Next.js routing
     -> From code based to file based
-    ->
+    -> create react component files and let nextjs infer the routes from the folder structure.
+    -> In file based routing we don't need extra boilerplate like <switch><Route></Route</switch>.
+
+7. <Link> component prefetches the data as soon as we hover over on it.
+
+8. _app.js is a root component under which different page component renders in.
+
+9. 
