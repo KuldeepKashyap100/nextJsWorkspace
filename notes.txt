@@ -40,4 +40,85 @@
 
 8. _app.js is a root component under which different page component renders in.
 
-9. 
+9. Next.js will not just return pre-rendered page but also the js code that belongs to it,
+    -> and it will do something called hydrate with react code once loaded 
+    -> and that code will take over that pre-rendered page and let react do its job.
+    -> We sent back pre-rendered page initally so that all the core content was right there from the start
+    -> this pre-rendering only affects the initial load
+
+10. two forms of pre-rendering 
+    -> static generation -> All the pages are pre-generated in advance during build time before you deploy it.
+        -> data in pages are prepared during build time.
+        -> because pages are created during build time they can be cached by server/CDN.
+        -> after the pages are served they are still hydrated with you react app.
+        -> so we have a regular react app in the end. 
+        -> only difference is that the pages sent to the client are not empty initally but pre-populated.
+        -> how do we tell nextjs which data is needed to pre-generated the page?
+        -> you can export a function called `async function getStaticProps(context)` that we can export from our page components(not from other react components).
+        -> code inside `getStaticProps` will only run on server side and not on client and also does not have access to client API's(window etc).
+        -> when we export this function nextjs will call this function on your behalf when it pre-generates the page.
+        -> and this function also singals to nextjs that this is a page that should be pre-generated.
+        -> nextjs will first execute this function and in the second step execute the functional component.
+        -> it should return an object with props key({props: {}}).
+    -> server side rendering -> pages are created just in time after deployment after request reaches the server.
+
+11. Incremental static generation 
+    -> built-in nextjs feature
+    -> it means that you don't just generate your page statically once at build time
+    -> but that is continusally updated even after deployment without you reployment.
+    -> so you pre-generate a page but then you can also tell nextjs that the given page should
+    -> be re-generated again for every incoming request for every X seconds
+    -> ex- if new request comes and X seconds already passed from the last request re-gennerate the page.
+    -> i.e 'serve old page if re-generation is not needed yet' or 'Generate Store and serve new page otherwise'
+
+12. Pre-Generated paths (routes)
+    -> To Pre-render dynamic pages([id].js etc) nextjs need to know which [id] values will be available
+    -> Multiple concrete [id] page instances(ex: id=1, id=2 etc.) are pre-generated
+    -> we do inform nextjs about this by using another function `async function getStaticPaths()`
+    -> json data is pre-fetched by nextjs when we visit the root page and even before we hover over the links.
+
+13. fallback: true in getStaticPaths return obj.
+    ->fallback key can help if we have lot of pages which wouldn't need pre-generating
+    ->for ex if we are creating blog website and we have millions of articles but very 
+    ->few articles are frequently read so pre-rendering all the blogs is waste of resources
+    ->when we set fallback: true we tell nextjs that even pages that are not listed here
+    ->can be valid values that should be loaded when they are visited but they are not pre-generated
+    -> but they are generated just-in-time when a request reaches a server, and that allows us to pre-generate
+    ->highly visited pages and postpone the generation to less frequently visited pages to the server  
+
+14. If the user directly enters the dynamic route in search bar. 
+    -> nextjs will throw an error. because data is not present at front-end and nextjs 
+    -> will need some time to fetch it. so we need to create a fallback block like a spinner or loader
+    -> till nextjs fetches the data and after getting the data nextjs will automatically update the component
+    -> with fetched data. 
+    -> If we set fallback: "blocking", we can remove that fallback block from the component but
+    -> it will take nextjs a little bit longer to load the page.
+
+15. server side rendering 
+    -> sometimes you need to pre-render for every request OR you need access to the request object(e.g. for cookies)
+    -> nextjs allows you to run "real server side code" as well
+    -> which means it gives you a function which you can add in you page component files
+    -> which is then executed whenever the request for this page reaches the server 
+    -> so it is not pre-generated during build time or every couple of seconds
+    -> but it's really a server side code which is executed every time request reaches the server
+    -> and that function is "async function getServerSideProps()"
+    -> for a single page component we can either use "getStaticProps" or "getServerSideProps"
+
+
+16. client-side data fetching
+    -> some data doesn't need to be pre-rendered. like
+    -> data changing with high frequency(e.g. stock data)
+    -> highly user-specific data(e.g. last orders in an online shop)
+    -> (because search engine won't see this data, it needs auth)
+    -> partial data (e.g. data that's only used on a part of a page)
+    -> (let's say you have dashboard page with lots of different pieces of data, lots of different kinds of data. 
+    -> In such case, loading all these different pieces which makes the overall dashboard might slow down the request if you do that on the server).
+
+17. "useSWR"(stale-while-revalidate) nextjs hook to fetch data. under the hood it still uses fetch API. 
+    -> but it has other feture like caching data and revalidating data and on focus re-fetch the data
+    -> SWR is a strategy to first return the data from cache (stale), 
+    -> then send the fetch request (revalidate), and finally come with the up-to-date data.
+    -> https://swr.vercel.app/
+
+18. combining pre-fetching with client-side fetching
+    -> using useEffect on client side and getStaticProps from server side
