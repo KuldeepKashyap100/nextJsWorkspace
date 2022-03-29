@@ -122,3 +122,36 @@
 
 18. combining pre-fetching with client-side fetching
     -> using useEffect on client side and getStaticProps from server side
+
+19. To inject head content of HTML page.
+    -> we can use <Head> component from "next/head"
+    -> add it to any component and it will be added to head html tag of the page.
+
+20. _app.js is root app component
+    -> _app.js is a application shell
+    -> _app.js is a root component inside the body of the HTML page.
+    -> which is rendered for every page that has been displayed.
+    -> nextjs merges if have multiple <Head> tags
+    -> if we have duplicates in <Head> tag then later one wins
+
+21. _document.js allows us to customize the entire HTML document
+    -> default document structure:
+    -> <Html>
+            <Head />
+            <body>
+                <Main />
+                <NextScript />
+            </body>
+        </Html>
+    -> what could be the reason to override that default document?
+    -> if you want to configure the general document like adding the lang="en" attribute to Html tag.
+    
+22. <Image> component
+    -> if we use this component nextjs will create multiple versions of our image on the fly when requests are coming in.
+    -> optimize for the OS and device sizes that are making the requests.
+    -> then those generated images will be cached for future requests from similar devices.
+    -> for ex- chrome supports webp images which are more compressed.
+    -> images lazy loaded by <Image> component, so when it comes on viewport, A request will be made.
+    
+23. API routes
+    -> 
