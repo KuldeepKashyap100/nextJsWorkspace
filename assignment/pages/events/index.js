@@ -6,7 +6,7 @@ import Head from "next/head";
 
 
 
-function EventsPage(props) {
+function AllEventsPage(props) {
     const router = useRouter();
     const findEventsHandler = (selectedYear, selectedMonth) => {
         const fullPath = `/events/${selectedYear}/${selectedMonth}`;
@@ -36,4 +36,4 @@ export async function getStaticProps() {
     };
 }
  
-export default EventsPage;
+export default AllEventsPage;

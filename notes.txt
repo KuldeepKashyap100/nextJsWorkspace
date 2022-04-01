@@ -154,4 +154,6 @@
     -> images lazy loaded by <Image> component, so when it comes on viewport, A request will be made.
     
 23. API routes
-    -> 
+    -> create rest API's under /pages/api
+    -> fileName = rest endpoint 
+    -> export a function which takes req, res as arguments

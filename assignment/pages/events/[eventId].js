@@ -1,10 +1,10 @@
 import {useRouter} from "next/router";
-import EventContent from "../../../components/event-detail/event-content";
-import EventLogistics from "../../../components/event-detail/event-logistics";
-import EventSummary from "../../../components/event-detail/event-summary";
-import {getEventById} from "../../../data/dummy-data";
-import ErrorAlter from "../../../components/ui/error-alert";
+import EventContent from "../../components/event-detail/event-content";
+import EventLogistics from "../../components/event-detail/event-logistics";
+import EventSummary from "../../components/event-detail/event-summary";
+import ErrorAlter from "../../components/ui/error-alert";
 import Head from "next/head";
+import Comments from "../../components/input/comments";
 
 
 function EventDetailPage(props) {
@@ -13,7 +13,13 @@ function EventDetailPage(props) {
     // const event = getEventById(eventId);
     const {event} = props;
 
-    if(!event) return <ErrorAlter><p>No event Found</p></ErrorAlter>;
+    if (!event) {
+        return (
+          <div className="center">
+            <p>Loading...</p>
+          </div>
+        );
+      }
 
 
     return (
@@ -27,6 +33,7 @@ function EventDetailPage(props) {
             <EventContent>
                 {event.description}
             </EventContent>
+            <Comments eventId={event.id} />
         </>
     );
 }
