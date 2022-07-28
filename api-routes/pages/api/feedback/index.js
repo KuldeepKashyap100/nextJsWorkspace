@@ -12,6 +12,7 @@ export function extractFeedback(filePath) {
 }
 
 function handler(req, res) {
+  debugger;
   if (req.method === 'POST') {
     const email = req.body.email;
     const feedbackText = req.body.text;
