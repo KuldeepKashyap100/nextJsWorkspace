@@ -50,12 +50,14 @@
     -> static generation -> All the pages are pre-generated in advance during build time before you deploy it.
         -> data in pages are prepared during build time.
         -> because pages are created during build time they can be cached by server/CDN.
-        -> after the pages are served they are still hydrated with you react app.
+        -> after the pages are served they are still hydrated with your react app.
         -> so we have a regular react app in the end. 
         -> only difference is that the pages sent to the client are not empty initally but pre-populated.
         -> how do we tell nextjs which data is needed to pre-generated the page?
-        -> you can export a function called `async function getStaticProps(context)` that we can export from our page components(not from other react components).
-        -> code inside `getStaticProps` will only run on server side and not on client and also does not have access to client API's(window etc).
+        -> you can export a function called `async function getStaticProps(context)` 
+            that we can export from our page components(not from other react components).
+        -> code inside `getStaticProps` will only run on server side and not on client 
+            and also does not have access to client API's(window etc).
         -> when we export this function nextjs will call this function on your behalf when it pre-generates the page.
         -> and this function also singals to nextjs that this is a page that should be pre-generated.
         -> nextjs will first execute this function and in the second step execute the functional component.
@@ -68,14 +70,18 @@
     -> but that is continusally updated even after deployment without you reployment.
     -> so you pre-generate a page but then you can also tell nextjs that the given page should
     -> be re-generated again for every incoming request for every X seconds
-    -> ex- if new request comes and X seconds already passed from the last request re-gennerate the page.
+    -> ex- if new request comes and X seconds already passed from the last request then re-generate the page.
     -> i.e 'serve old page if re-generation is not needed yet' or 'Generate Store and serve new page otherwise'
 
 12. Pre-Generated paths (routes)
     -> To Pre-render dynamic pages([id].js etc) nextjs need to know which [id] values will be available
     -> Multiple concrete [id] page instances(ex: id=1, id=2 etc.) are pre-generated
     -> we do inform nextjs about this by using another function `async function getStaticPaths()`
+    -> nextjs will call getStaticPaths() and get all the ids for which we need to pre-generate the pages
+    -> now for each id nextjs will get getStaticProps.
     -> json data is pre-fetched by nextjs when we visit the root page and even before we hover over the links.
+    -> ex- if we have 3 ids p1, p2 and p3 and we visit root page(localhost:3000) and check network tab
+    -> we can see that requests for p1.json, p2.json and p3.json has already been made and data(props) is there on frontend.
 
 13. fallback: true in getStaticPaths return obj.
     ->fallback key can help if we have lot of pages which wouldn't need pre-generating
@@ -83,7 +89,7 @@
     ->few articles are frequently read so pre-rendering all the blogs is waste of resources
     ->when we set fallback: true we tell nextjs that even pages that are not listed here
     ->can be valid values that should be loaded when they are visited but they are not pre-generated
-    -> but they are generated just-in-time when a request reaches a server, and that allows us to pre-generate
+    ->but they are generated just-in-time when a request reaches a server, and that allows us to pre-generate
     ->highly visited pages and postpone the generation to less frequently visited pages to the server  
 
 14. If the user directly enters the dynamic route in search bar. 
@@ -94,7 +100,10 @@
     -> If we set fallback: "blocking", we can remove that fallback block from the component but
     -> it will take nextjs a little bit longer to load the page.
 
-15. server side rendering 
+15. If the user directly enters the dynamic route in search bar and that dynamic route does not exists.
+    -> we have to return {notFound: true} from getStaticProps.
+
+16. server side rendering 
     -> sometimes you need to pre-render for every request OR you need access to the request object(e.g. for cookies)
     -> nextjs allows you to run "real server side code" as well
     -> which means it gives you a function which you can add in you page component files
@@ -115,7 +124,7 @@
     -> In such case, loading all these different pieces which makes the overall dashboard might slow down the request if you do that on the server).
 
 17. "useSWR"(stale-while-revalidate) nextjs hook to fetch data. under the hood it still uses fetch API. 
-    -> but it has other feture like caching data and revalidating data and on focus re-fetch the data
+    -> but it has other features like caching data and revalidating data and on focus re-fetch the data
     -> SWR is a strategy to first return the data from cache (stale), 
     -> then send the fetch request (revalidate), and finally come with the up-to-date data.
     -> https://swr.vercel.app/
