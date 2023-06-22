@@ -62,7 +62,7 @@
         -> and this function also singals to nextjs that this is a page that should be pre-generated.
         -> nextjs will first execute this function and in the second step execute the functional component.
         -> it should return an object with props key({props: {}}).
-    -> server side rendering -> pages are created just in time after deployment after request reaches the server.
+    -> server side rendering -> pages are created just in time after deployment after request reaches the server(on the go).
 
 11. Incremental static generation 
     -> built-in nextjs feature
@@ -168,16 +168,21 @@
     -> export a function which takes req, res as arguments
 
 24. ReactDOM.createPortal(child, container)
+    createPortal lets you render some children into a different part of the DOM.
     Portals provide a first-class way to render children into a DOM node 
     that exists outside the DOM hierarchy of the parent component.
+    A portal only changes the physical placement of the DOM node. 
+    In every other way, the JSX you render into a portal acts as a child node of the React component that renders it. 
+    For example, the child can access the context provided by the parent tree, 
+    and events bubble up from children to parents according to the React tree.
     snippet:
-    return ReactDOM.createPortal(
+    {ReactDOM.createPortal(
         <div className={cssClasses}>
         <h2>{title}</h2>
         <p>{message}</p>
         </div>,
         document.getElementById('notifications')
-    );
+    )}
     we have created empty div with id='notifications' in _document.js
 
 25. Deployment Options
